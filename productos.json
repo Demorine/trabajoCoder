@@ -1,1 +1,92 @@
-[]
+[
+    {
+      "id": 1,
+      "title": "producto uno",
+      "description": "Este es un producto prueba",
+      "price": 100,
+      "thumbnail": "Sin Imagen",
+      "code": "a1",
+      "stock": 5
+    },
+    {
+      "id": 2,
+      "title": "producto dos",
+      "description": "Este es un producto prueba",
+      "price": 200,
+      "thumbnail": "Sin Imagen",
+      "code": "a2",
+      "stock": 15
+    },
+    {
+      "id": 3,
+      "title": "producto tres",
+      "description": "Este es un producto prueba",
+      "price": 300,
+      "thumbnail": "Sin Imagen",
+      "code": "a3",
+      "stock": 25
+    },
+    {
+      "id": 4,
+      "title": "producto cuatro",
+      "description": "Este es un producto prueba",
+      "price": 400,
+      "thumbnail": "Sin Imagen",
+      "code": "a4",
+      "stock": 35
+    },
+    {
+      "id": 5,
+      "title": "producto cinco",
+      "description": "Este es un producto prueba",
+      "price": 500,
+      "thumbnail": "Sin Imagen",
+      "code": "a5",
+      "stock": 45
+    },
+    {
+      "id": 6,
+      "title": "producto seis",
+      "description": "Este es un producto prueba",
+      "price": 600,
+      "thumbnail": "Sin Imagen",
+      "code": "a6",
+      "stock": 55
+    },
+    {
+      "id": 7,
+      "title": "producto siete",
+      "description": "Este es un producto prueba",
+      "price": 700,
+      "thumbnail": "Sin Imagen",
+      "code": "a7",
+      "stock": 65
+    },
+    {
+      "id": 8,
+      "title": "producto ocho",
+      "description": "Este es un producto prueba",
+      "price": 800,
+      "thumbnail": "Sin Imagen",
+      "code": "a8",
+      "stock": 75
+    },
+    {
+      "id": 9,
+      "title": "producto nueve",
+      "description": "Este es un producto prueba",
+      "price": 900,
+      "thumbnail": "Sin Imagen",
+      "code": "a9",
+      "stock": 85
+    },
+    {
+      "id": 10,
+      "title": "producto diez",
+      "description": "Este es un producto prueba",
+      "price": 1000,
+      "thumbnail": "Sin Imagen",
+      "code": "a0",
+      "stock": 95
+    }
+  ]

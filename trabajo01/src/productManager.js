@@ -1,6 +1,6 @@
-const fs = require('fs')
+import fs from 'fs'
 
-class ProductManager {
+export class ProductManager {
 
     constructor(filePath) {
         this.path = filePath
@@ -103,54 +103,54 @@ class ProductManager {
 
 }
 
-const productManager = new ProductManager('productos.json')
+// const productManager = new ProductManager('productos.json')
 
 
-console.log('Get Product Vacio')
-console.log(productManager.getProducts())
-console.log(' ')
+// console.log('Get Product Vacio')
+// console.log(productManager.getProducts())
+// console.log(' ')
 
-console.log('Producto agregado')
-productManager.addProduct({
-    title: "producto prueba",
-    description: "Este es un producto prueba",
-    price: 200,
-    thumbnail: "Sin Imagen",
-    code: "abc123",
-    stock: 25
-})
-console.log(' ')
+// console.log('Producto agregado')
+// productManager.addProduct({
+//     title: "producto prueba",
+//     description: "Este es un producto prueba",
+//     price: 200,
+//     thumbnail: "Sin Imagen",
+//     code: "abc123",
+//     stock: 25
+// })
+// console.log(' ')
 
-console.log('Primer producto en el get')
-console.log(productManager.getProducts())
-console.log(' ')
+// console.log('Primer producto en el get')
+// console.log(productManager.getProducts())
+// console.log(' ')
 
-console.log('Llamar getProductById (id: 1)')
-productManager.getProductsById(1)
-console.log(' ')
+// console.log('Llamar getProductById (id: 1)')
+// productManager.getProductsById(1)
+// console.log(' ')
 
-console.log('Llamar a updateProduct')
-productManager.updateProduct(1, {
-    title: "producto prueba Modificado",
-    description: "descripcion modificada",
-    price: 400,
-    thumbnail: "Sin Imagen",
-    code: "abc123",
-    stock: 50
-})
-console.log(' ')
+// console.log('Llamar a updateProduct')
+// productManager.updateProduct(1, {
+//     title: "producto prueba Modificado",
+//     description: "descripcion modificada",
+//     price: 400,
+//     thumbnail: "Sin Imagen",
+//     code: "abc123",
+//     stock: 50
+// })
+// console.log(' ')
 
-console.log('Get product con producto actualizado')
-console.log(productManager.getProducts())
-console.log(' ')
+// console.log('Get product con producto actualizado')
+// console.log(productManager.getProducts())
+// console.log(' ')
 
-console.log('Llamando a deleteProduct (id: 1)')
-productManager.deleteProduct(1)
-console.log(' ')
+// console.log('Llamando a deleteProduct (id: 1)')
+// productManager.deleteProduct(1)
+// console.log(' ')
 
-console.log('Llamando a deleteProduct sin que exista un producto')
-productManager.deleteProduct(1)
-console.log(' ')
+// console.log('Llamando a deleteProduct sin que exista un producto')
+// productManager.deleteProduct(1)
+// console.log(' ')
 
-console.log('Llamando a get despues de borrar un producto')
-console.log(productManager.getProducts())
+// console.log('Llamando a get despues de borrar un producto')
+// console.log(productManager.getProducts())
