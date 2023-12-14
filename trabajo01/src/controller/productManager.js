@@ -1,6 +1,6 @@
-import fs from 'fs'
+const fs = require ('fs')
 
-export class ProductManager {
+class ProductManager {
 
     constructor(filePath) {
         this.path = filePath
@@ -105,6 +105,7 @@ export class ProductManager {
 
 // const productManager = new ProductManager('productos.json')
 
+module.exports = ProductManager 
 
 // console.log('Get Product Vacio')
 // console.log(productManager.getProducts())
