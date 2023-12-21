@@ -1,4 +1,5 @@
 const {Router} = require('express')
+const { isEmptyObject } = require('jquery')
 const ProductManager = require('./productManager.js')
 
 const productManager = new ProductManager('productos.json')
@@ -9,8 +10,18 @@ router.get('/', (req, res) => {
     console.log('Inicio')
     const limit = req.query.limit ? parseInt(req.query.limit) : undefined
     const products = productManager.getProducts().slice(0, limit)
-    console.log(products)
-    res.json({ products })
+    // console.log(products)
+    // res.json({ products })
+    res.render('home', {products})
+})
+
+router.get('/realtimeproducts', (req, res) => {
+    console.log('Inicio RT')
+    const limit = req.query.limit ? parseInt(req.query.limit) : undefined
+    const products = productManager.getProducts().slice(0, limit)
+    // console.log(products)
+    // res.json({ products })
+    res.render('realTimeProducts', {products})
 })
 
 router.get('/:pid', (req,res) => {

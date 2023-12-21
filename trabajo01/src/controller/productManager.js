@@ -2,10 +2,13 @@ const fs = require ('fs')
 
 class ProductManager {
 
-    constructor(filePath) {
+    constructor(filePath, io) {
         this.path = filePath
         this.product = []
         this.id = 1
+
+        this.io = io
+
 
         this.loadProducts()
     }
@@ -54,6 +57,7 @@ class ProductManager {
 
         this.product.push(newProduct)
 
+
         this.saveProduct()
 
     }
@@ -95,6 +99,7 @@ class ProductManager {
         if (index !== -1) {
             this.product.splice(index, 1)
             this.saveProduct()
+            io.emit('updateProducts', this.getProducts())
             console.log('Producto Eliminado')
         } else {
             console.error('Producto no encontrado')

@@ -5,6 +5,7 @@ const router = app => {
     
     app.use('/api/products', productController)
     app.use('/api/cart', cartController)
+
 }
 
 module.exports = router

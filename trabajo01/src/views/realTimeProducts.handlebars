@@ -1,0 +1,14 @@
+
+<h1>Lista de Productos en Tiempo Real</h1>
+    <ul id="productList">
+      {{#each products}}
+        <li>{{this.title}} - {{this.description}} - {{this.price}}</li>
+      {{/each}}
+    </ul>
+
+<div>
+  <input type="text" id="deleteProduct">
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/products.js"></script>
