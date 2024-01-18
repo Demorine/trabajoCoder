@@ -1,6 +1,9 @@
 const app = require('./server.js')
 const { port } = require('./configs/server.configs.js')
 const { Server } = require('socket.io')
+const mongoConnect = require('./db/index.js')
+
+mongoConnect()
 
 const httpServer = app.listen(port, () => {
     console.log(`Iniciado en http://localhost:${port}`)

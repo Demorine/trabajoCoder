@@ -1,0 +1,49 @@
+
+
+<div id="chatMessages">
+    {{#each messages}}
+        <p>{{this.user}}: {{this.message}}</p>
+    {{/each}}
+</div>
+
+<div>
+    <form id="chatForm">
+        <input type="text" id="user" placeholder="Usuario" required>
+        <input type="text" id="message" placeholder="Mensaje" required>
+        <button type="submit">Enviar</button>
+    </form>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    const socket = io()
+
+    socket.on('updateChat', function(messages) {
+    updateChat(messages)
+})
+
+function sendMessage(user, message) {
+    socket.emit('sendMessage', {user, message})
+}
+
+function updateChat(messages) {
+    const chatMessages = document.getElementById('chatMessages')
+    chatMessages.innerHTML = ''
+
+    messages.forEach(function (message) {
+        const  paragraph = document.createElement('p')
+        paragraph.textContent = message.user + ': ' + message.message
+        chatMessages.appendChild(paragraph)
+    })
+}
+
+document.getElementById('chatForm').addEventListener('submit', function(event) {
+    event.preventDefault()
+    const user = document.getElementById('user').value
+    const message = document.getElementById('message').value
+    sendMessage(user, message)
+})
+</script>
+
+<script src="../js/chat.js"></script>
