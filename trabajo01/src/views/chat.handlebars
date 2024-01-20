@@ -1,14 +1,11 @@
 
 
 <div id="chatMessages">
-    {{#each messages}}
-        <p>{{this.user}}: {{this.message}}</p>
-    {{/each}}
+
 </div>
 
 <div>
     <form id="chatForm">
-        <input type="text" id="user" placeholder="Usuario" required>
         <input type="text" id="message" placeholder="Mensaje" required>
         <button type="submit">Enviar</button>
     </form>
@@ -19,9 +16,11 @@
 <script>
     const socket = io()
 
+    const user = prompt("Nombre de Usuario")
+
     socket.on('updateChat', function(messages) {
-    updateChat(messages)
-})
+        updateChat(messages)
+    })
 
 function sendMessage(user, message) {
     socket.emit('sendMessage', {user, message})
@@ -40,9 +39,11 @@ function updateChat(messages) {
 
 document.getElementById('chatForm').addEventListener('submit', function(event) {
     event.preventDefault()
-    const user = document.getElementById('user').value
     const message = document.getElementById('message').value
     sendMessage(user, message)
+
+    document.getElementById("chatForm").reset()
+
 })
 </script>
 
