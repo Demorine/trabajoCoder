@@ -10,31 +10,94 @@ router.get('/', (req, res) => {
     res.json({carts})
 })
 
-router.get('/:cid', (req, res) => {
-    const cartId = req.params.cid
-    const cart = readCartsFile().find(cart => cart.id === cartId)
+router.get('/:cid', async (req, res) => {
 
-    if (cart) {
-        res.json({cart})
-    } else {
-        res.status(404).json({ error: 'carrito no encontrado'})
+    try {
+        const { cid } = req.params
+
+        const cart = await Cart.findById(cid).populate('products.product')
+
+        if (!cart) {
+            return res.status(404).json({ status: 'error', error: 'Carro no encontrado'})
+        }
+
+        res.render('cart', { products: cart.products })
+    } catch(error) {
+        res.json({error})
     }
+
+    // fs
+    // const cartId = req.params.cid
+    // const cart = readCartsFile().find(cart => cart.id === cartId)
+
+    // if (cart) {
+    //     res.json({cart})
+    // } else {
+    //     res.status(404).json({ error: 'carrito no encontrado'})
+    // }
 })
 
-router.post('/', (req, res) => {
-    const newCart = {
-        id: generateUniqueID(),
-        products: [],
-    }
+router.post('/', async (req, res) => {
 
-    const carts = readCartsFile()
-    carts.push(newCart)
-    writeCartsFile(carts)
+    try {
 
-    res.json({ message: 'Carrito creado', cart: newCart})
+        const newCart = new Cart()
+        const savedCart = await newCart.save()
+
+        res.status(201).json({ status: 'success', cart: savedCart })
+
+    } catch(error) {
+        res.json({error})
+    } 
+
+    // funcion fs
+    // const newCart = {
+    //     id: generateUniqueID(),
+    //     products: [],
+    // }
+
+    // const carts = readCartsFile()
+    // carts.push(newCart)
+    // writeCartsFile(carts)
+
+    // res.json({ message: 'Carrito creado', cart: newCart})
 })
 
-router.post('/:cid/product/:pid', (req, res) => {
+router.post('/:cid/products', async (req,res) => {
+    try {
+        const { cid } = req.params
+        const { productId, quantity } = req.body
+
+        const cart = await Cart.findById(cid)
+
+        if (!cart) {
+            return res.status(404).json({ status: 'error', error: 'Carro no encontrado'})
+        }
+
+        const existingProduct = cart.products.find((p) => p.product === productId)
+
+        if (existingProduct) {
+
+            existingProduct.quantity += quantity || 1
+
+        } else {
+
+            cart.products.push({ product: productId, quantity: quantity || 1})
+
+        }
+
+        const savedCart = await cart.save()
+
+        res.json({ status: 'success', cart: savedCart })
+
+    } catch(error) {
+        console.log(error)
+        res.json({error})
+
+    }
+}) 
+
+router.post('/:cid/products/:pid', (req, res) => {
     const cartId = req.params.cid
     const productId = parseInt(req.params.pid)
     const quantity = req.body.quantity || 1
@@ -55,25 +118,93 @@ router.post('/:cid/product/:pid', (req, res) => {
     }
 })
 
-function readCartsFile() {
-    try {
-        const data = fs.readFileSync(cartsFilePath, 'utf8')
-        return JSON.parse(data)
-    } catch (error) {
-        return [];
-    }
-}
+router.put('/:cid', async (req,res) => {
 
-function writeCartsFile(carts) {
     try {
-        fs.writeFileSync(cartsFilePath, JSON.stringify(carts,null, 2), 'utf8')
-    } catch (error) {
-        console.error('Error escribiendo archivo carrito', error)
-    }
-}
+        const { cid } = req.params
+        const { products } = req.body
 
-function generateUniqueID() {
-    return Date.now().toString(36) + Math.random().toString(36).substring(2)
-}
+        const cart = await Cart.findById(cid)
+
+        if (!cart) {
+            return res.status(404).json({ status: 'error', error: 'Carro no encontrado'})
+        }
+
+        cart.products = products
+
+        const savedCart = await cart.save()
+
+        res.json({status: 'success', cart: savedCart})
+    } catch(error) {
+        res.json({ error })
+    }
+    
+})
+
+router.delete('/:cid/products/:pid', async(req, res) => {
+    try {
+        const { cid, pid } = req.params
+
+        const cart = await Cart.findById(cid)
+
+        if (!cart) {
+
+            return res.status(404).json({ status: 'error', error: 'carrito no encontrado'})
+
+        }
+
+        cart.products = cart.products.filter((p) => !p.product === pid)
+
+        const savedCart = await cart.save()
+
+        res.json({ status: 'success', cart: savedCart})
+    } catch(error) {
+        res.json({error})
+    }
+})
+
+router.delete('/:cid', async(req, res) => {
+    try {
+        const { cid } = req.params
+
+        const cart = await Cart.findById(cid)
+
+        if (!cart) {
+
+            return res.status(404).json({ status: 'error', error: 'carrito no encontrado'})
+
+        }
+
+        cart.products = []
+
+        const savedCart = await cart.save() 
+
+        res.json({ status: 'success', cart: savedCart})
+    } catch(error) {
+        res.json({error})
+    }
+})
+
+
+// function readCartsFile() {
+//     try {
+//         const data = fs.readFileSync(cartsFilePath, 'utf8')
+//         return JSON.parse(data)
+//     } catch (error) {
+//         return [];
+//     }
+// }
+
+// function writeCartsFile(carts) {
+//     try {
+//         fs.writeFileSync(cartsFilePath, JSON.stringify(carts,null, 2), 'utf8')
+//     } catch (error) {
+//         console.error('Error escribiendo archivo carrito', error)
+//     }
+// }
+
+// function generateUniqueID() {
+//     return Date.now().toString(36) + Math.random().toString(36).substring(2)
+// }
 
 module.exports = router

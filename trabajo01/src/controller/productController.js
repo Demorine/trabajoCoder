@@ -3,16 +3,55 @@ const { isEmptyObject } = require('jquery')
 const ProductManager = require('../dao/manager/productManager.js')
 const Product = require('../dao/models/product.model')
 
-const productManager = new ProductManager('productos.json')
+// const productManager = new ProductManager('productos.json')
 
 const router = Router()
 
 router.get('/', async (req, res) => {
     console.log('Inicio')
     try {
-        // const limit = req.query.limit ? parseInt(req.query.limit) : undefined
-        const products = await Product.find() // .slice(0, limit)
-        res.json({payload: products})
+        
+        const { limit = 10, page = 1, sort, query, category, available } = req.query
+
+        const options = {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            sort: sort ? { price: sort === 'asc' ? 1 : -1 } : {},
+            customLabels: { docs: 'payload' }
+        }
+
+
+        const findQuery = {}
+
+        if (query) {
+            findQuery.$or = [ 
+                { title: new RegExp(query, 'i') },
+                { description: new RegExp(query, 'i') } 
+            ]
+        }
+
+        if (category) {
+            findQuery.category = category
+        }
+
+        if (available !== undefined) {
+            findQuery.available = available
+        }
+
+        const result = await Product.paginate(findQuery, options)
+
+        res.render('products', {
+            products: result.payload,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            page: result.page,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            prevLink: result.hasPrevPage ? `/products?limit=${limit}$page=${result.prevPage}` : null,
+            nextLink: result.hasNextPage ? `/products?limit=${limit}$page=${result.nextPage}` : null
+        })
+
     } catch(error) {
         res.json({error})
     }
@@ -40,8 +79,13 @@ router.get('/:id', async (req,res) => {
     try {
         const { id } = req.params
 
-        const product = await Product.findOne({ _id: id})
-        res.json({payload: product})
+        const product = await Product.findById(id)
+
+        if (!product) {
+            return res.status(404).json({ status: 'error', error: 'Producto no encontrado' })
+        }
+
+        res.render('productDetails', { product })
     } catch(error) {
         res.json({error})
     }
