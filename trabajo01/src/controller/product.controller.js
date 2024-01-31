@@ -38,10 +38,12 @@ router.get('/', async (req, res) => {
             findQuery.available = available
         }
 
+        const products = await Product.find().lean()
+
         const result = await Product.paginate(findQuery, options)
 
         res.render('products', {
-            products: result.payload,
+            products: products,
             totalPages: result.totalPages,
             prevPage: result.prevPage,
             nextPage: result.nextPage,
@@ -51,6 +53,8 @@ router.get('/', async (req, res) => {
             prevLink: result.hasPrevPage ? `/products?limit=${limit}$page=${result.prevPage}` : null,
             nextLink: result.hasNextPage ? `/products?limit=${limit}$page=${result.nextPage}` : null
         })
+
+        // res.json({products: result.payload})
 
     } catch(error) {
         res.json({error})
@@ -79,7 +83,7 @@ router.get('/:id', async (req,res) => {
     try {
         const { id } = req.params
 
-        const product = await Product.findById(id)
+        const product = await Product.findById(id).lean()
 
         if (!product) {
             return res.status(404).json({ status: 'error', error: 'Producto no encontrado' })
@@ -99,6 +103,19 @@ router.get('/:id', async (req,res) => {
     // } else {
     //     res.status(404).json({error: 'Producto no encontrado'})
     // }
+})
+
+router.get('/a', async (req,res) => {
+
+    try {
+
+        const products = await Product.find().lean()
+
+        res.render('productsTest', { products })
+    } catch(error) {
+        res.json({error})
+    }
+
 })
 
 router.post('/', async (req, res) => {

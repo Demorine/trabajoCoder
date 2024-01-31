@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
+const { mongopass } = require('../configs/server.configs')
 
 
 const mongoConnect = async () => {
     try {
-        await mongoose.connect('mongodb+srv://maximilianocortez789:GlcYRfLNAVNQ6BH1@ecommerce.fdmhsgy.mongodb.net/50000?retryWrites=true&w=majority')
+        await mongoose.connect(mongopass)
         console.log('db conectada.')
     } catch (error) {
         console.log(error)
