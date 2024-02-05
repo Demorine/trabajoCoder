@@ -2,13 +2,17 @@ const {Router} = require('express')
 const { isEmptyObject } = require('jquery')
 const ProductManager = require('../dao/manager/productManager.js')
 const Product = require('../dao/models/product.model')
+const authMiddleware = require('../middlewares/auth.middleware.js')
 
 // const productManager = new ProductManager('productos.json')
 
 const router = Router()
 
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
     console.log('Inicio')
+
+    const {user} = req.session
+
     try {
         
         const { limit = 10, page = 1, sort, query, category, available } = req.query
@@ -42,7 +46,10 @@ router.get('/', async (req, res) => {
 
         const result = await Product.paginate(findQuery, options)
 
+        console.log()
+
         res.render('products', {
+            user,
             products: products,
             totalPages: result.totalPages,
             prevPage: result.prevPage,

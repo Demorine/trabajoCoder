@@ -1,5 +1,14 @@
 <h1>Productos</h1>
 
+<label for="">Nombre</label>
+<p>{{user.first_name}}</p>
+
+<label for="">Apellido</label>
+<p>{{user.last_name}}</p>
+
+<label for="">Correo</label>
+<p>{{user.email}}</p>
+
 {{#each products}}
   <div>
     <h2>{{title}}</h2>
@@ -15,3 +24,7 @@
 {{#if hasNextPage}}
   <a href="{{nextLink}}">Página siguiente</a>
 {{/if}}
+
+<button id="logout">Cerrar Sesión</button>
+
+<script src="/js/logout.js"></script>

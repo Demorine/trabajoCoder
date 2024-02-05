@@ -7,7 +7,7 @@ form.addEventListener('submit', e => {
 
     const obj = {}
 
-    data.forEach((value,key) => obj[key] = value)
+    data.forEach((value, key) => (obj[key] = value))
 
     const url = '/api/auth'
     const headers = {
@@ -21,7 +21,12 @@ form.addEventListener('submit', e => {
         method,
         body
     })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.log(error))
+        .then(response => {
+            if (response.ok) {
+                window.location.href= '/api/products'
+            } else {
+                console.error('error al iniciar sesion')
+            }
+        })
+        .catch(error => console.error(error))      
 })

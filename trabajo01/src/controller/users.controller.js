@@ -18,13 +18,11 @@ router.post('/', async (req, res) => {
 
         const user = await User.create(newUserInfo)
 
-    res.json({status: 'success', message: user})
+    //res.json({status: 'success', message: user})
+    res.redirect('/login')
     } catch (error) {
         res.json({error})
     }
-    
-
-
 
 })
 

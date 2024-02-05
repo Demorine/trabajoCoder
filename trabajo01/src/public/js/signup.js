@@ -21,7 +21,12 @@ form.addEventListener('submit', e => {
         method,
         body
     })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.log(error))
+        .then(response => {
+            if (response.ok) {
+                window.location.href = 'login'
+            } else {
+                console.error('error al registrarse')
+            }
+        })
+        .catch(error => console.error('error: ', error))
 })

@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
     try {
         const {email, password} = req.body
 
-        const user = await User.find({email})
+        const user = await User.findOne({email})
 
         if (!user)
             return res.status(400).json({message: 'Bad Request'})
@@ -23,7 +23,9 @@ router.post('/', async (req, res) => {
             email: user.email
     }
 
-    res.json({status: 'success', message: 'Logeo Exitoso'})
+    
+    res.redirect('/api/products')
+    //res.json({status: 'success', message: 'Logeo Exitoso'})
     } catch (error) {
         res.json({error})
     }
@@ -31,6 +33,16 @@ router.post('/', async (req, res) => {
 
 
 
+})
+
+router.post('/logout', (req, res) => {
+    console.log('logout')
+    req.session.destroy(err => {
+      if (err) {
+        console.error('error al cerrar sesion', err)
+      } else
+      res.redirect('/login')
+    })
 })
 
 module.exports = router

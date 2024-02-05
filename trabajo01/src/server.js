@@ -12,9 +12,9 @@ const { mongopass } = require('./configs/server.configs')
 //const fileStorage = fileStore(session)
 
 app.engine('handlebars', handlebars.engine())
-app.set('views', process.cwd() + '/src/views')
+app.set('views', 'src/views')
 app.set('view engine', 'handlebars')
-app.use(express.static(process.cwd() + '/public',))
+app.use(express.static('src/public',))
 app.use(express.json())
 app.use(cookieParser('coder50000'))
 app.use(session({
