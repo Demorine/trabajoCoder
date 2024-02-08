@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser')
 //const fileStore = require('session-file-store')
 const session = require('express-session')
 const mongoStore = require('connect-mongo')
+const initializePassport = require('./configs/passport.config')
+const passport = require('passport')
 
 const { mongopass } = require('./configs/server.configs')
 
@@ -23,9 +25,11 @@ app.use(session({
             mongoUrl: mongopass,
             ttl: 60,
         }),
-        //store: new fileStorage({path: './sessions', ttl: 60000})
     })
 )
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 router(app)
 

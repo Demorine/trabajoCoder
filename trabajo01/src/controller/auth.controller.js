@@ -1,38 +1,49 @@
 const {Router} = require('express')
+const passport = require('passport')
 const User = require('../dao/models/user.model')
+const { isValidPassword } = require('../utils/crypt-password.util')
+const { generateToken } = require('../utils/jwt.util')
 
 
 const router = Router()
 
-router.post('/', async (req, res) => {
+router.post('/',
+    passport.authenticate('login', { failureRedirect: '/api/auth/failed-login'}),
+    async (req, res) => {
 
-    try {
-        const {email, password} = req.body
+        try {
+        // const {email, password} = req.body
 
-        const user = await User.findOne({email})
+        // const user = await User.findOne({email})
 
-        if (!user)
-            return res.status(400).json({message: 'Bad Request'})
+        // if (!user)
+        //     return res.status(400).json({message: 'Bad Request'})
 
-        if (user.password !== password)
-            return res.status(400).json({message: 'Bad Request'})
+        // if (!isValidPassword(user, password))
+        //     return res.status(400).json({message: 'Bad Request'})
 
-        req.session.user = {
-            first_name: user.first_name,
-            last_name: user.last_name,
-            email: user.email
-    }
+            req.session.user = {
+                first_name: req.user.first_name,
+                last_name: req.user.last_name,
+                email: req.user.email
+            }
 
-    
+            const token = generateToken({ id: user.id, role: user.role})
+
+            res.cookie('authToken', token, {
+                maxAge: 60000,
+                httpOnly: true
+            })
+
+            
+
+            
     res.redirect('/api/products')
     //res.json({status: 'success', message: 'Logeo Exitoso'})
     } catch (error) {
         res.json({error})
     }
     
-
-
-
 })
 
 router.post('/logout', (req, res) => {
@@ -43,6 +54,11 @@ router.post('/logout', (req, res) => {
       } else
       res.redirect('/login')
     })
+})
+
+router.get('/failed-login', (req, res) => {
+    console.log('Inicio fallido')
+    return res.status(400).json({ status: 'error', error: 'Bad request' })
 })
 
 module.exports = router

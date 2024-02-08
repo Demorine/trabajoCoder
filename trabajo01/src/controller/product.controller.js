@@ -1,14 +1,16 @@
 const {Router} = require('express')
 const { isEmptyObject } = require('jquery')
+const passport = require('passport')
 const ProductManager = require('../dao/manager/productManager.js')
 const Product = require('../dao/models/product.model')
 const authMiddleware = require('../middlewares/auth.middleware.js')
-
+const { authToken } = require('../utils/jwt.util.js')
+const passportCall = require('../utils/passport-call.util')
 // const productManager = new ProductManager('productos.json')
 
 const router = Router()
 
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', authMiddleware, passportCall('jwt'),  async (req, res) => {
     console.log('Inicio')
 
     const {user} = req.session
@@ -45,8 +47,6 @@ router.get('/', authMiddleware, async (req, res) => {
         const products = await Product.find().lean()
 
         const result = await Product.paginate(findQuery, options)
-
-        console.log()
 
         res.render('products', {
             user,
