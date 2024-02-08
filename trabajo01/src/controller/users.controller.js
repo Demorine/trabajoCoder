@@ -22,7 +22,7 @@ router.post('/',
         // }
 
         // const user = await User.create(newUserInfo)
-    res.json({status: 'success', message: user})
+    res.json({status: 'success', message: req.user})
     //res.redirect('/login')
     } catch (error) {
         res.json({error})
