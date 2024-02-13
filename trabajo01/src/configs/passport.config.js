@@ -32,9 +32,10 @@ const initializePassport = () => {
                 const {first_name, last_name, email} = req.body
                 const user = await User.findOne({email: username})
 
-                if(user)
+                if(user) {
                     console.log('Usuario existente')
                     return done(null, false)
+                }
 
                 const newUserInfo = {
                     first_name,

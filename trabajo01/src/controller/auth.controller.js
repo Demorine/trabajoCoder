@@ -24,11 +24,11 @@ router.post('/',
 
             req.session.user = {
                 first_name: req.user.first_name,
-                last_name: req.user.last_name,
+                last_name: req.user.last_name,  
                 email: req.user.email
             }
 
-            const token = generateToken({ id: user.id, role: user.role})
+            const token = generateToken({ id: req.user.id, role: req.user.role})
 
             res.cookie('authToken', token, {
                 maxAge: 60000,
