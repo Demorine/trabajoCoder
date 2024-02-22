@@ -4,7 +4,9 @@ const jwt = require('passport-jwt')
 const cookieExtractor = require('../utils/cookie-extractor.util')
 const { secretKey } = require('./server.configs')
 const User = require('../dao/models/user.model')
+const GithubStrategy = require('passport-github2')
 const { createHash, isValidPassword } = require('../utils/crypt-password.util')
+const { GH_Client_ID, GH_Client_Secret} = require('../configs/server.configs')
 
 const JWTStrategy = jwt.Strategy
 
@@ -29,7 +31,7 @@ const initializePassport = () => {
 
             try {
                 
-                const {first_name, last_name, email} = req.body
+                const {first_name, last_name, age, email} = req.body
                 const user = await User.findOne({email: username})
 
                 if(user) {
@@ -41,6 +43,7 @@ const initializePassport = () => {
                     first_name,
                     last_name,
                     email,
+                    age,
                     password: createHash(password)
                 }
 
@@ -79,6 +82,12 @@ const initializePassport = () => {
             }
 
         }))
+
+    // passport.use('github', new GithubStrategy({
+    //     clientID: GH_Client_ID,
+    //     clientSecret: GH_Client_Secret,
+    //     callbackURL: "http://127.0.0.1:3000/auth/github/callback"
+    // }))
 
     passport.serializeUser((user, done) => {
         console.log(user)

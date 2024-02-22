@@ -15,6 +15,9 @@ const userSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
+    age: {
+        type: Number,
+    },
     password:{
         type: String,
         required: true
@@ -23,6 +26,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: Object.values(enumStatus),
         default: enumStatus.user
+    },
+    cart:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'cart'
     }
         
 })
