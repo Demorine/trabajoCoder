@@ -3,10 +3,10 @@ const local = require('passport-local')
 const jwt = require('passport-jwt')
 const cookieExtractor = require('../utils/cookie-extractor.util')
 const { secretKey } = require('./server.configs')
-const User = require('../dao/models/user.model')
 const GithubStrategy = require('passport-github2')
 const { createHash, isValidPassword } = require('../utils/crypt-password.util')
 const { GH_Client_ID, GH_Client_Secret} = require('../configs/server.configs')
+const { findUser, createUser, findUserByID } = require('../dao/manager/userManager')
 
 const JWTStrategy = jwt.Strategy
 
@@ -32,7 +32,8 @@ const initializePassport = () => {
             try {
                 
                 const {first_name, last_name, age, email} = req.body
-                const user = await User.findOne({email: username})
+
+                const user = await findUser(username)
 
                 if(user) {
                     console.log('Usuario existente')
@@ -47,7 +48,7 @@ const initializePassport = () => {
                     password: createHash(password)
                 }
 
-                const newUser = await User.create(newUserInfo)
+                const newUser = await createUser(newUserInfo)
 
                 return done(null, newUser)
 
@@ -63,7 +64,7 @@ const initializePassport = () => {
         async (username, password, done) => {
 
             try {
-                const user = await User.findOne({ email: username})
+                const user = await findUser(username)
 
                 if (!user) {
                     console.log('No existe')
@@ -95,7 +96,7 @@ const initializePassport = () => {
     })
 
     passport.deserializeUser(async (id, done) => {
-        const user = User.findOne({_id: id})
+        const user = findUserByID(id)
         done(null, user)
     })
 

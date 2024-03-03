@@ -1,10 +1,11 @@
 const {Router} = require('express')
 const passport = require('passport')
-const ProductManager = require('../dao/manager/productManager.js')
+// const oldProductManager = require('../dao/manager/oldProductManager.js')
 const Product = require('../dao/models/product.model')
 const authMiddleware = require('../middlewares/auth.middleware.js')
 const { authToken } = require('../utils/jwt.util.js')
 const passportCall = require('../utils/passport-call.util')
+const { paginate, findProduct } = require('../dao/manager/productManager')
 // const productManager = new ProductManager('productos.json')
 
 const router = Router()
@@ -43,9 +44,9 @@ router.get('/', passportCall('jwt'),  async (req, res) => {
             findQuery.available = available
         }
 
-        const products = await Product.find().lean()
+        const products = await findProduct()
 
-        const result = await Product.paginate(findQuery, options)
+        const result = await paginate(findQuery, options)
 
         res.render('products', {
             user,
@@ -75,14 +76,14 @@ router.get('/', passportCall('jwt'),  async (req, res) => {
     // res.render('home', {products})
 })
 
-router.get('/realtimeproducts', (req, res) => {
-    console.log('Inicio RT')
-    const limit = req.query.limit ? parseInt(req.query.limit) : undefined
-    const products = productManager.getProducts().slice(0, limit)
-    // console.log(products)
-    // res.json({ products })
-    res.render('realTimeProducts', {products})
-})
+// router.get('/realtimeproducts', (req, res) => {
+//     console.log('Inicio RT')
+//     const limit = req.query.limit ? parseInt(req.query.limit) : undefined
+//     const products = productManager.getProducts().slice(0, limit)
+//     // console.log(products)
+//     // res.json({ products })
+//     res.render('realTimeProducts', {products})
+// })
 
 router.get('/:id', async (req,res) => {
 

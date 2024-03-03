@@ -9,7 +9,7 @@ const mongoStore = require('connect-mongo')
 const initializePassport = require('./configs/passport.config')
 const passport = require('passport')
 
-const { mongopass } = require('./configs/server.configs')
+const { mongopass, SECRET } = require('./configs/server.configs')
 
 //const fileStorage = fileStore(session)
 
@@ -20,7 +20,7 @@ app.use(express.static('src/public',))
 app.use(express.json())
 app.use(cookieParser('coder50000'))
 app.use(session({
-        secret: 'coderSecret',
+        secret: SECRET,
         store: mongoStore.create({
             mongoUrl: mongopass,
             ttl: 60,

@@ -61,4 +61,11 @@ router.get('/failed-login', (req, res) => {
     return res.status(400).json({ status: 'error', error: 'Bad request' })
 })
 
+router.get('github', (req,res) => {
+    
+})
+
+router.get('githubcallback', (req,res) => {
+
+})
 module.exports = router
