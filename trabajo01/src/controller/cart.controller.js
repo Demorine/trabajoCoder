@@ -2,7 +2,9 @@ const {Router} = require('express')
 const router = Router()
 const fs = require('fs')
 const Cart = require('../dao/models/cart.model')
-
+const cartManager = require('../dao/manager/cartManager')
+const { updateCart } = require('../dao/manager/cartManager')
+const { createTicketFromCart } = require('../dao/manager/ticketManager.js')
 const cartsFilePath = 'carrito.json'
 
 router.get('/', (req, res) => {
@@ -118,28 +120,7 @@ router.post('/:cid/products/:pid', (req, res) => {
     }
 })
 
-router.put('/:cid', async (req,res) => {
-
-    try {
-        const { cid } = req.params
-        const { products } = req.body
-
-        const cart = await Cart.findById(cid)
-
-        if (!cart) {
-            return res.status(404).json({ status: 'error', error: 'Carro no encontrado'})
-        }
-
-        cart.products = products
-
-        const savedCart = await cart.save()
-
-        res.json({status: 'success', cart: savedCart})
-    } catch(error) {
-        res.json({ error })
-    }
-    
-})
+router.put('/:cid', updateCart)
 
 router.delete('/:cid/products/:pid', async(req, res) => {
     try {
@@ -181,6 +162,30 @@ router.delete('/:cid', async(req, res) => {
 
         res.json({ status: 'success', cart: savedCart})
     } catch(error) {
+        res.json({error})
+    }
+})
+
+router.patch('/:uid/associate-cart/:cid', async (req, res) => {
+    const { uid, cid } = req.params
+
+    try {
+        const user = await cartManager.associateCartToUser(uid, cid)
+        res.status(200).json({ success: true, user })
+    } catch (error) {
+        res.json({error})
+    }
+
+})
+
+router.post('/:cid/purchase', async (req, res) => {
+
+    const { cid } = req.params
+
+    try {
+        const ticket = await createTicketFromCart(cid)
+        res.status(200).json({ success: true, ticket})
+    } catch (error) {
         res.json({error})
     }
 })

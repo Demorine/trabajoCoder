@@ -7,10 +7,11 @@ const { authToken } = require('../utils/jwt.util.js')
 const passportCall = require('../utils/passport-call.util')
 const { paginate, findProduct } = require('../dao/manager/productManager')
 // const productManager = new ProductManager('productos.json')
+const { checkAdminRole } = require('../middlewares/rolecheck.middleware')
 
 const router = Router()
 
-router.get('/', passportCall('jwt'),  async (req, res) => {
+router.get('/', passportCall('jwt'), checkAdminRole,  async (req, res) => {
     console.log('Inicio')
 
     const {user} = req.session
@@ -48,18 +49,37 @@ router.get('/', passportCall('jwt'),  async (req, res) => {
 
         const result = await paginate(findQuery, options)
 
-        res.render('products', {
-            user,
-            products: products,
-            totalPages: result.totalPages,
-            prevPage: result.prevPage,
-            nextPage: result.nextPage,
-            page: result.page,
-            hasPrevPage: result.hasPrevPage,
-            hasNextPage: result.hasNextPage,
-            prevLink: result.hasPrevPage ? `/products?limit=${limit}$page=${result.prevPage}` : null,
-            nextLink: result.hasNextPage ? `/products?limit=${limit}$page=${result.nextPage}` : null
-        })
+        console.log(res.locals.checkAdminRole)
+
+        if (res.locals.checkAdminRole) {
+            res.render('productsAdmin', {
+                user,
+                products: products,
+                totalPages: result.totalPages,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+                page: result.page,
+                hasPrevPage: result.hasPrevPage,
+                hasNextPage: result.hasNextPage,
+                prevLink: result.hasPrevPage ? `/products?limit=${limit}$page=${result.prevPage}` : null,
+                nextLink: result.hasNextPage ? `/products?limit=${limit}$page=${result.nextPage}` : null
+            })
+        } else {
+            res.render('products', {
+                user,
+                products: products,
+                totalPages: result.totalPages,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+                page: result.page,
+                hasPrevPage: result.hasPrevPage,
+                hasNextPage: result.hasNextPage,
+                prevLink: result.hasPrevPage ? `/products?limit=${limit}$page=${result.prevPage}` : null,
+                nextLink: result.hasNextPage ? `/products?limit=${limit}$page=${result.nextPage}` : null
+            })
+        }
+
+        
 
         // res.json({products: result.payload})
 

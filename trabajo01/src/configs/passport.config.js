@@ -7,6 +7,7 @@ const GithubStrategy = require('passport-github2')
 const { createHash, isValidPassword } = require('../utils/crypt-password.util')
 const { GH_Client_ID, GH_Client_Secret} = require('../configs/server.configs')
 const { findUser, createUser, findUserByID } = require('../dao/manager/userManager')
+const UserDTO = require('../DTO/userDTO')
 
 const JWTStrategy = jwt.Strategy
 
@@ -75,8 +76,10 @@ const initializePassport = () => {
                     console.log('Contraseña incorrecta')
                     return done(null, false)
                 }
+
+                const userDTO = new UserDTO(user)
             
-                return done(null, user)
+                return done(null, userDTO)
 
             } catch(error) {
                 done(error)

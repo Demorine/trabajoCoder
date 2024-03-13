@@ -15,6 +15,12 @@ async function createUser(newUserInfo) {
     return User.create(newUserInfo)
 }
 
+async function pushCart(cartInfo) {
+
+    return User.push(cartInfo)
+    
+}
+
 module.exports = {
     findUser,
     createUser,

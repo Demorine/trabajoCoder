@@ -9,8 +9,15 @@
 <label for="">Edad</label>
 <p>{{user.age}}</p>
 
-<label for="">Role</label>
-<p>{{user.role}}</p>
+<label for="">Correo</label>
+<p>{{user.email}}</p>
+
+{{if isAdmin}}
+  <h1>Usted es Administrador</h1>
+
+
+  
+{{/if}}
 
 {{#each products}}
   <div>

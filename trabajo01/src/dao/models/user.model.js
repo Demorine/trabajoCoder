@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
         default: enumStatus.user
     },
     cart:{
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref: 'cart'
     }
         

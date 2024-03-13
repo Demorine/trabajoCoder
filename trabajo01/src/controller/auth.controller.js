@@ -25,7 +25,8 @@ router.post('/',
             req.session.user = {
                 first_name: req.user.first_name,
                 last_name: req.user.last_name,  
-                email: req.user.email
+                email: req.user.email,
+                role: req.user.role
             }
 
             const token = generateToken({ id: req.user.id, role: req.user.role})
