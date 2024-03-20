@@ -17,7 +17,7 @@ async function addProductsToCart(cartId, products) {
         
         console.log(products, cartId)
 
-        const cart = Cart.findById(cartId)
+        const cart = await Cart.findById(cartId)
 
         if (!cart) {
 
@@ -57,20 +57,23 @@ async function updateProductStock(productId, quantity) {
 
         const product = await Product.findById(productId)
 
-        if (product.stock >= quantity) {
-
-            product.stock -= quantity
-
-            await product.save()
-
-        } else {
-            console.log('No hay stock del producto en cuestion.')
+        if (!product) {
+            throw new Error ('Producto no encontrado')
         }
 
-    } catch (error) {
-        res.json({error})
-    }
+        if (product.stock < quantity) {
+            throw new Error ('No hay stock disponible')
+        }
 
+        product.stock -= quantity
+
+        await product.save()
+
+        return product
+   
+    } catch (error) {
+        throw new Error ('Error al actualizar stock')
+    }
 }
 
 module.exports = {

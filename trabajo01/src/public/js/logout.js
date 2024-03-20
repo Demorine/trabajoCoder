@@ -19,3 +19,4 @@ logoutButton.addEventListener('click', () => {
     .catch(error => console.error('error: ', error))
 
 })
+

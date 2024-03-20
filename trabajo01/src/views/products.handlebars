@@ -17,6 +17,7 @@
     <h2>{{title}}</h2>
     <p>{{description}}</p>
     <p>Precio: {{price}}</p>
+    <p>Stock: {{stock}}</p>
   </div>
 {{/each}}
 
@@ -28,6 +29,9 @@
   <a href="{{nextLink}}">Página siguiente</a>
 {{/if}}
 
+<button id="createCartBtn">Crear Carrito</button>
+
 <button id="logout">Cerrar Sesión</button>
 
 <script src="/js/logout.js"></script>
+<script src="/js/carthandler.js"></script>

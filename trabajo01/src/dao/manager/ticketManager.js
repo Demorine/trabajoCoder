@@ -9,7 +9,7 @@ const { findCart } = require('../manager/cartManager')
 async function createTicketFromCart(cartId) {
     try {
 
-        const cart = findCart(cartId).populate('products')
+        const cart = await Cart.findById(cartId).populate('products')
 
         if (!cart) {
 
@@ -17,21 +17,22 @@ async function createTicketFromCart(cartId) {
         
         }
 
-        const productIds = cart.products.map(products => products._id)
-
-        const products = await Product.find({ _id: { $in: productIds } })
-
         let totalPrice = 0
 
-        products.forEach(product => {
-            totalPrice += product.price
-        })
+        for (const item of cart.products) {
+            const product = await Product.findById(item._id)
 
-        // for (const item of cart.products) {
-        //     const { productId, quantity, } = item
+            if (!product) {
+                throw new Error ('Producto no encontrado')
+            }
 
-        //     await updateProductStock( productId, quantity)
-        // }
+            totalPrice += product.price * item.quantity
+
+        }
+
+        for (const item of cart.products) {
+            await updateProductStock(item._id, item.quantity)
+        }
 
         const user = await User.findById(cart.userId)
         const userEmail = user.email
@@ -46,6 +47,7 @@ async function createTicketFromCart(cartId) {
         return ticket
 
     }   catch(error) {
+        console.log({error})
         res.json({error})
     }
 }

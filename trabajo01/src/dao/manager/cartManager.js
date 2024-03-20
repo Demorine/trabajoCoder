@@ -28,9 +28,9 @@ async function updateCart(req, res) {
 async function associateCartToUser(userId, cartId) {
     try {
 
-        const user = findUserById(userId)
+        const user = await User.findById(userId)
 
-        const cart = findCart(cartId)
+        const cart = await Cart.findById(cartId)
 
         if (!user) {
             throw new Error ('Usuario no encontrado')
