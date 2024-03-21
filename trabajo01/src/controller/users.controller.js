@@ -1,6 +1,7 @@
 const {Router} = require('express')
 const passport = require('passport')
 const User = require('../dao/models/user.model')
+const Cart = require('../dao/models/cart.model')
 // const { createHash } = require('../utils/crypt-password.util')
 
 
@@ -28,6 +29,46 @@ router.post('/',
         res.json({error})
     }
 
+})
+
+router.get('/obtain-user', (req, res) => {
+    try {
+
+        if (!req.user) {
+            throw new Error ('Usuario no autenticado')
+        }
+
+        const userId = req.session.user.id
+
+        res.json({ userId })
+
+    } catch (error) {
+        res.json({error})
+    }
+})
+
+router.get('/obtain-associated', async (req, res) => {
+    try {
+
+        if (!req.user) {
+            throw new Error ('Usuario no autenticado')
+        }
+
+        const userId = req.session.user.id
+
+        const cartId = await Cart.findOne({userId})
+
+        console.log(userId,cartId)
+
+        if (!cartId) {
+            return res.status(404).json({ message: 'Carrito no encontrado' })
+        }
+
+        res.json({ cartId })
+
+    } catch (error) {
+        res.json({error})
+    }
 })
 
 router.get('/failed-signup', (req, res) => {

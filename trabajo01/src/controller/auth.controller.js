@@ -23,11 +23,14 @@ router.post('/',
         //     return res.status(400).json({message: 'Bad Request'})
 
             req.session.user = {
+                id: req.user.id,
                 first_name: req.user.first_name,
                 last_name: req.user.last_name,  
                 email: req.user.email,
                 role: req.user.role
             }
+
+            console.log(req.session)
 
             const token = generateToken({ id: req.user.id, role: req.user.role})
 
@@ -35,9 +38,6 @@ router.post('/',
                 maxAge: 60000,
                 httpOnly: true
             })
-
-            
-
             
     res.redirect('/api/products')
     //res.json({status: 'success', message: 'Logeo Exitoso'})

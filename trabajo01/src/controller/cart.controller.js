@@ -191,6 +191,7 @@ router.post('/:cid/purchase', async (req, res) => {
 })
 
 
+
 // function readCartsFile() {
 //     try {
 //         const data = fs.readFileSync(cartsFilePath, 'utf8')

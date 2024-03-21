@@ -18,6 +18,8 @@
     <p>{{description}}</p>
     <p>Precio: {{price}}</p>
     <p>Stock: {{stock}}</p>
+    <button onclick="addToCart('{{_id}}')">Agregar al Carrito</button>
+
   </div>
 {{/each}}
 
@@ -29,7 +31,11 @@
   <a href="{{nextLink}}">Página siguiente</a>
 {{/if}}
 
-<button id="createCartBtn">Crear Carrito</button>
+<br>
+
+<button id="create-cart-btn">Crear Carrito</button>
+
+<button id="create-ticket-btn">Crear Ticket</button>
 
 <button id="logout">Cerrar Sesión</button>
 
